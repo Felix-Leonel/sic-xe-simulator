@@ -1,6 +1,7 @@
 package Carregador;
 
 import Mem.Memoria;
+import Mem.Palavramem;
 import Regs.Registradores;
 import java.io.*;
 
@@ -48,19 +49,33 @@ public class AbsoluteLoader {
 
     private void processTextRecord(String[] parts) {
         int address = Integer.parseInt(parts[1], 16);
-        String code = parts[3];
-        moveToMemory(address, code);
+        String code = parts[3]; 
+        moveToMemory(memoria, address, code);
+    }
+    
+    public int findNextFreeMemoryIndex() {
+        for (int i = 0; i < memoria.memoria.size(); i++) {
+            Palavramem palavra = memoria.memoria.get(i);
+            if (palavra.getBytes()[0] == 0 && palavra.getBytes()[1] == 0 && palavra.getBytes()[2] == 0) {
+                return i;
+            }
+        }
+        return memoria.memoria.size();
     }
 
-    private void moveToMemory(int address, String code) {
+    public void moveToMemory(Memoria memoria, int address, String code) {
         for (int i = 0; i < code.length(); i += 6) {
+            int memIndex = findNextFreeMemoryIndex(); // Encontrando o próximo índice livre
+            if (memIndex >= memoria.memoria.size()) {
+                System.err.println("Erro: Memória insuficiente!");
+                return;
+            }
             if (i + 6 <= code.length()) {
                 byte b1 = (byte) Integer.parseInt(code.substring(i, i + 2), 16);
                 byte b2 = (byte) Integer.parseInt(code.substring(i + 2, i + 4), 16);
                 byte b3 = (byte) Integer.parseInt(code.substring(i + 4, i + 6), 16);
-                memoria.memoria.get(address).setValor(b1, b2, b3);
+                memoria.memoria.get(memIndex).setValor(b1, b2, b3);  // Atualizando a memória
             }
-            address++;
         }
     }
 
