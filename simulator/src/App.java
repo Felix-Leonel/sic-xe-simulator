@@ -26,8 +26,8 @@ public class App extends Application {
         memoria.memoria.get(1).setValor((byte) 0x0A, (byte) 0x0B, (byte) 0x0C);
 
         // Cria o AbsoluteLoader e executa a carga do programa
-        AbsoluteLoader loader = new AbsoluteLoader(memoria, registradores);
-        loader.execute();
+        //AbsoluteLoader loader = new AbsoluteLoader(memoria, registradores);
+        //loader.execute();
 
         // Carrega a interface gráfica
         FXMLLoader loaderFXML = new FXMLLoader(getClass().getResource("style.fxml"));
