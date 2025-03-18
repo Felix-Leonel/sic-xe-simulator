@@ -14,7 +14,7 @@ import java.util.Map;
 public class Ligador {
     
     private static final String OBJECT_FILE = "codigo_objeto.txt"; 
-    private static int EXECADDR; // Endereço de execução
+    private static int EXECADDR;
     private Map<String, Integer> ESTAB = new HashMap<>(); // Tabela de símbolos externos
     private String programName;
 
@@ -47,7 +47,7 @@ public class Ligador {
                 if (type == 'H') {  // Cabeçalho
                     programName = parts[1].trim();
                 } 
-                else if (type == 'D') {  // Definição de símbolo externo
+                else if (type == 'D') { 
                     String symbol = parts[1].trim();
                     int address = Integer.parseInt(parts[2].trim(), 16) % 1000; // Garantir que está no intervalo de 0 a 999
                     ESTAB.put(symbol, address);
@@ -107,7 +107,7 @@ public class Ligador {
                 else if (type == 'E') { // Endereço de execução
                     if (parts.length > 1) {
                         try {
-                            EXECADDR = Integer.parseInt(parts[1].trim(), 16) % 1000; // Ajuste no intervalo
+                            EXECADDR = Integer.parseInt(parts[1].trim(), 16) % 1000; 
                         } catch (NumberFormatException e) {
                             System.err.println("Aviso: Endereço de execução inválido, usando padrão.");
                             EXECADDR = 0;
