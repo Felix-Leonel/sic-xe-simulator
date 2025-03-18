@@ -1,3 +1,4 @@
+// Ligador.java
 package Ligador;
 
 import Mem.Memoria;
@@ -12,8 +13,8 @@ import java.util.Map;
 
 public class Ligador {
     
-    private static final String OBJECT_FILE = "teste.txt"; 
-    private static int EXECADDR;
+    private static final String OBJECT_FILE = "codigo_objeto.txt"; 
+    private static int EXECADDR; // Endereço de execução
     private Map<String, Integer> ESTAB = new HashMap<>(); // Tabela de símbolos externos
     private String programName;
 
@@ -32,7 +33,7 @@ public class Ligador {
         ligador.pass2(memoria);
         
         System.out.println("--- Memória depois da execução ---");
-        ligador.printMemory(memoria, 0, 200);
+        ligador.printMemory(memoria, 0, 600);
     }
 
     public void pass1() {
@@ -71,7 +72,8 @@ public class Ligador {
                 char type = parts[0].charAt(0);
     
                 if (type == 'H') {  // Cabeçalho
-                    int firstFreeAddress = loader.findNextFreeMemoryIndex(); // findNextFreeMemoryIndex do AbsoluteLoader 
+                    int firstFreeAddress = loader.findNextFreeMemoryIndex();
+                    programName = parts[1].trim();
                     System.out.println("Passagem 2 - Carregando segmento " + programName + " no primeiro espaço livre: " + firstFreeAddress);
                 } 
                 else if (type == 'T') { // Trecho de código
@@ -102,10 +104,10 @@ public class Ligador {
                         System.err.println("Erro: Formato inválido na linha de modificação!");
                     }
                 } 
-                else if (type == 'E') { 
+                else if (type == 'E') { // Endereço de execução
                     if (parts.length > 1) {
                         try {
-                            EXECADDR = Integer.parseInt(parts[1].trim(), 16) % 1000; 
+                            EXECADDR = Integer.parseInt(parts[1].trim(), 16) % 1000; // Ajuste no intervalo
                         } catch (NumberFormatException e) {
                             System.err.println("Aviso: Endereço de execução inválido, usando padrão.");
                             EXECADDR = 0;
@@ -121,7 +123,7 @@ public class Ligador {
                 System.out.println(entry.getKey() + " -> " + entry.getValue());
             }
     
-            loader.executeAtAddress(EXECADDR); 
+            loader.executeAtAddress(EXECADDR); // Executando o carregador no endereço de execução
             
         } catch (IOException e) {
             System.err.println("Erro na leitura do arquivo objeto: " + e.getMessage());

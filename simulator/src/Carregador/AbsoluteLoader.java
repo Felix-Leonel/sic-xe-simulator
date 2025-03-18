@@ -24,6 +24,7 @@ public class AbsoluteLoader {
 
     public void executeAtAddress(int address) {
         System.out.println("Executando programa no endereço: " + address);
+        // Simulação de execução (pode ser expandida)
     }
 
     public void loadModule(String module) {
